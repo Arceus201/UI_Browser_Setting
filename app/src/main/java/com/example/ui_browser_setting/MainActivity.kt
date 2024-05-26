@@ -8,9 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ui_browser_setting.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), OnItemClickListener, EditUrlDialogFragment.EditUrlDialogListener {
-
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
     private lateinit var adapter: MyAdapter
     private val items = mutableListOf(
         "http://example.com/1",
@@ -20,13 +23,26 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, EditUrlDialogFrag
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         adapter = MyAdapter(items, this, this)
         recyclerView.adapter = adapter
+
+        binding.buttonAddUrl.setOnClickListener {
+            addUrl()
+        }
+    }
+
+    private fun addUrl(){
+        val newUrl = binding.editTextUrl.text.toString().trim()
+        if (newUrl.isNotEmpty()) {
+            items.add(newUrl)
+            adapter.notifyItemInserted(items.size - 1)
+            binding.editTextUrl.text.clear()
+        }
     }
 
     override fun onEditClick(position: Int) {
