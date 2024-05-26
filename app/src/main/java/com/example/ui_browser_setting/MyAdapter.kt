@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ui_browser_setting.databinding.ItemLayoutBinding
 
 class MyAdapter(
-    private val items: MutableList<String>,
-    private val context: Context,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    private val expandedPositions = mutableSetOf<Int>()
+    private var items: MutableList<UrlData>? = null
+    fun setItems(newItems: MutableList<UrlData>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(val binding: ItemLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -23,8 +25,8 @@ class MyAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-        holder.binding.textViewUrl.text = item
+        val item = items?.get(position)
+        holder.binding.textViewUrl.text = item?.url
 
         val isExpanded = expandedPositions.contains(position)
         holder.binding.subItemLayout.visibility = if (isExpanded) View.VISIBLE else View.GONE
@@ -49,15 +51,17 @@ class MyAdapter(
         }
 
         holder.binding.buttonChromeCustomTab.setOnClickListener {
-            listener.onChromeCustomTabClick(item)
+            item?.url?.let { it1 -> listener.onChromeCustomTabClick(it1) }
         }
 
         holder.binding.buttonChrome.setOnClickListener {
-            listener.onChromeClick(item)
+            item?.url?.let { it1 -> listener.onChromeClick(it1) }
         }
     }
 
+    private val expandedPositions = mutableSetOf<Int>()
+
     override fun getItemCount(): Int {
-        return items.size
+        return items?.size ?: 0
     }
 }
