@@ -21,7 +21,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
             android:id="@+id/buttonDown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +46,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
             android:id="@+id/buttonEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +56,9 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
             android:id="@+id/buttonDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +67,9 @@
             app:layout_constraintStart_toEndOf="@+id/buttonEdit"
             tools:ignore="MissingConstraints" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
             android:id="@+id/buttonChromeCustomTab"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -71,7 +79,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
             android:id="@+id/buttonChrome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -1,16 +1,17 @@
 package com.example.ui_browser_setting
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ui_browser_setting.databinding.ItemLayoutBinding
 
-class MyAdapter(private val items: List<String>, private val context: Context) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyAdapter(
+    private val items: MutableList<String>,
+    private val context: Context,
+    private val listener: OnItemClickListener
+) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     private val expandedPositions = mutableSetOf<Int>()
 
@@ -30,6 +31,7 @@ class MyAdapter(private val items: List<String>, private val context: Context) :
         holder.binding.buttonDown.text = if (isExpanded) "Up" else "Down"
 
         holder.binding.buttonDown.setOnClickListener {
+            listener.onDownClick(position, isExpanded)
             if (isExpanded) {
                 expandedPositions.remove(position)
             } else {
@@ -39,24 +41,19 @@ class MyAdapter(private val items: List<String>, private val context: Context) :
         }
 
         holder.binding.buttonEdit.setOnClickListener {
-            // Handle edit action
+            listener.onEditClick(position)
         }
 
         holder.binding.buttonDelete.setOnClickListener {
-            // Handle delete action
+            listener.onDeleteClick(position)
         }
 
         holder.binding.buttonChromeCustomTab.setOnClickListener {
-            val url = item
-            val builder = CustomTabsIntent.Builder()
-            val customTabsIntent = builder.build()
-            customTabsIntent.launchUrl(context, Uri.parse(url))
+            listener.onChromeCustomTabClick(item)
         }
 
         holder.binding.buttonChrome.setOnClickListener {
-            val url = item
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            context.startActivity(browserIntent)
+            listener.onChromeClick(item)
         }
     }
 
