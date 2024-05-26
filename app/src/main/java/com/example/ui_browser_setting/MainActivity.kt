@@ -21,7 +21,12 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, EditUrlDialogFrag
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        items = mutableListOf()
+        items = if (savedInstanceState == null) {
+            mutableListOf()
+        } else {
+            savedInstanceState.getParcelableArrayList("items")
+        }
+
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -46,15 +51,20 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, EditUrlDialogFrag
         })
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList("items", items?.let { ArrayList(it) })
+    }
+
     // Lọc danh sách URL dựa trên từ khóa từ SearchView
     private fun filter(text: String?) {
         val filteredItems = mutableListOf<UrlData>()
         if (text.isNullOrBlank()) {
             items?.let { filteredItems.addAll(it) }
         } else {
-            val searchText = text.trim().toLowerCase()
+            val searchText = text.trim().lowercase()
             items?.forEach { url ->
-                if (url.url?.toLowerCase()?.contains(searchText) == true) {
+                if (url.url?.lowercase()?.contains(searchText) == true) {
                     filteredItems.add(url)
                 }
             }
