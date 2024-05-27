@@ -130,3 +130,55 @@ class MainActivity : AppCompatActivity(), OnItemClickListener, EditUrlDialogFrag
         adapter.notifyItemChanged(position)
     }
 }
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_main.*
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var adapter: MyAdapter
+    private lateinit var preferencesManager: PreferencesManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        preferencesManager = PreferencesManager(this)
+
+        val items = preferencesManager.getList()
+        adapter = MyAdapter(items) { item, position ->
+            onItemClicked(item, position)
+        }
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+        buttonAdd.setOnClickListener {
+            val newItem = editText.text.toString().trim()
+            if (newItem.isNotEmpty()) {
+                val updatedList = updateList(newItem, items)
+                preferencesManager.saveList(updatedList)
+                adapter.updateList(updatedList)
+                editText.text.clear()
+            }
+        }
+    }
+
+    private fun updateList(newItem: String, items: MutableList<String>): MutableList<String> {
+        items.remove(newItem)
+        items.add(0, newItem)
+        return items
+    }
+
+    private fun onItemClicked(item: String, position: Int) {
+        val newItem = editText.text.toString().trim()
+        if (newItem.isNotEmpty()) {
+            adapter.updateItem(newItem, position)
+            val updatedList = adapter.items
+            preferencesManager.saveList(updatedList)
+            editText.text.clear()
+        }
+    }
+}
